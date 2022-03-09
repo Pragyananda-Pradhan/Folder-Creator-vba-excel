@@ -1,0 +1,84 @@
+Private Sub Worksheet_Change(ByVal Target As Range)
+
+'thanks to pragyananda
+
+    Dim Z As Long
+
+    Dim xVal As String
+
+    On Error Resume Next
+
+    If Intersect(Target, Range("A:A")) Is Nothing Then Exit Sub
+
+    Application.EnableEvents = False
+
+    For Z = 1 To Target.Count
+
+        If Target(Z).Value > 0 Then
+
+            Call MakeFolders
+
+        End If
+
+    Next
+
+    Application.EnableEvents = True
+
+End Sub
+
+Sub MakeFolders()
+
+Dim Rng As Range
+
+Dim LastRow As Long
+
+Dim LastColumn As Long
+
+Dim maxRows As Integer
+
+Dim r As Integer
+
+Dim c As Integer
+
+Set sht = Worksheets("Sheet1")
+
+Set StartCell = Range("A1")
+
+LastRow = sht.Cells(sht.Rows.Count, StartCell.Column).End(xlUp).Row
+
+LastColumn = 1
+
+  sht.Range(StartCell, sht.Cells(LastRow, LastColumn)).Select
+
+Set Rng = Selection
+
+maxRows = Rng.Rows.Count
+
+For c = 1 To 1
+
+r = 1
+
+Do While r <= maxRows
+
+If Len(Dir(ActiveWorkbook.Path & "\" & Rng(r, c), vbDirectory)) = 0 Then
+
+MkDir (ActiveWorkbook.Path & "\" & Rng(r, c))
+
+On Error Resume Next
+
+End If
+
+r = r + 1
+
+Loop
+
+Next c
+
+Range("A" & Rows.Count).End(xlUp).Offset(1).Select
+
+End Sub
+
+
+
+
+
